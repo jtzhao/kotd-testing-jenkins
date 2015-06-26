@@ -159,7 +159,7 @@ if  [[ "$KOTD_URL" != http* ]]; then
 fi
 # create record file if necessary
 if ! [[ -f "$RECORD_FILE" ]]; then
-	mkdir -p $(dirname -z "$RECORD_FILE")
+	mkdir -p $(dirname "$RECORD_FILE")
 	touch $RECORD_FILE
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to create record file: $RECORD_FILE"
