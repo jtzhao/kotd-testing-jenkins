@@ -182,7 +182,7 @@ do
 	fi
 	echo "latest version of $KOTD_PACKAGE_NAME: $latest"
 	# check if latest version is tested
-	regexp=$(echo "^${KOTD_PACKAGE_NAME} ${latest}$" | sed -e 's/\./\./g')
+	regexp=$(echo "^${OS_RELEASE} ${KOTD_PACKAGE_NAME} ${arch} ${latest}$" | sed -e 's/\./\./g')
 	grep -P "$regexp" "$RECORD_FILE" &> /dev/null
 	if [[ $? -eq 0 ]]; then
 		echo "$KOTD_PACKAGE_NAME $latest is already tested"
@@ -192,7 +192,7 @@ do
 		if [[ $? -eq 0 ]]; then
 			# Add version to record file
 			echo -e "Successfully triggered jenkins job\n"
-			echo "${KOTD_PACKAGE_NAME} ${latest}" >> "$RECORD_FILE"
+			echo "${OS_RELEASE} ${KOTD_PACKAGE_NAME} ${arch} ${latest}" >> "$RECORD_FILE"
 		else
 			echo "Failed to trigger jenkins job"
 		fi
