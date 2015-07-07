@@ -27,6 +27,7 @@
 BIN_DIR=$(dirname "$0")
 LIB_DIR="$BIN_DIR/../lib"
 source "${LIB_DIR}/utils.sh"
+source "${LIB_DIR}/jenkins.sh"
 
 # Description: Print usage info
 usage()
@@ -48,10 +49,10 @@ END
 # Return:  	0 - pass
 #		1 - fail
 get_filelist() {
-	url=$1
-	regexp="(?<=<a href=\")[^\"]+\\.rpm"
-	cmd="curl -s '$url' | grep -oP '$regexp' | sort -h | uniq"
-	file_list=$(run $FUNCNAME "$cmd")
+	local url=$1
+	local regexp="(?<=<a href=\")[^\"]+\\.rpm"
+	local cmd="curl -s '$url' | grep -oP '$regexp' | sort -h | uniq"
+	local file_list=$(run $FUNCNAME "$cmd")
 	if [[ -n "$file_list" ]]; then
 		echo "$file_list"
 		return 0
@@ -68,8 +69,8 @@ get_filelist() {
 # Return:  	0 - pass
 #		1 - fail
 get_latest_version() {
-	url_or_filelist=$1
-	package_name=$2
+	local url_or_filelist=$1
+	local package_name=$2
 	# Get the version of packages
 	# Get filelist if $url_or_filelist is an url
 	if [[ "$url_or_filelist" == http* ]]; then

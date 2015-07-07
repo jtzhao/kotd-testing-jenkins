@@ -76,23 +76,3 @@ version_cmp() {
         debug $FUNCNAME "$1 = $2"
         return 0
 }
-
-
-# Description: trigger jenkins job
-# Parameter:    $1 - jenkins job url
-#               $2 - list of arguments, e.g. ARCH=x86_64,URL=xxxx
-# Output:       Prints curl command for debugging if pass
-# Return:       0 - trigger success
-#               1 - trigger failed
-trigger_jenkins()
-{
-        url="$1"
-        args="$2"
-        curl_cmd="curl --fail --silent -X POST '$url'"
-        for arg in $(echo "$args" | sed -e 's/,/ /g')
-        do
-                curl_cmd="$curl_cmd -d '$arg'"
-        done
-        run $FUNCNAME "$curl_cmd"
-        return $?
-}
