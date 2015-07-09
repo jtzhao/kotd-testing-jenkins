@@ -76,3 +76,7 @@ version_cmp() {
         debug $FUNCNAME "$1 = $2"
         return 0
 }
+
+regex_match()
+{
+}
