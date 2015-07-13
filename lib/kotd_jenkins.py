@@ -3,7 +3,7 @@ import requests
 from kotd_config import config
 
 
-def jenkins_trigger(fullname, args={}, headers={}):
+def trigger(fullname, args={}, headers={}):
     names = fullname.split('/')
     jenkins_port = ":%s" % config.get('jenkins', 'port') if config.has_option('jenkins', 'port') else ''
     base_url = "http://%s%s" % (config.get('jenkins', 'host'), jenkins_port)

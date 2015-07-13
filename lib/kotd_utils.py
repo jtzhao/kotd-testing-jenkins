@@ -1,8 +1,22 @@
 #!/usr/bin/env python
 import commands
 import logging
+import re
+import requests
 
 logger = logging.getLogger(__name__)
+
+def url_join(*args):
+    assert len(args) > 0, "argument list can't be empty"
+    if 1 == len(args):
+        return args[0]
+    lst = [args[0]]
+    for i in range(1, len(args)):
+        if not(args[i-1].endswith('/') or args[i].startswith('/')):
+            lst.append('/')
+        lst.append(args[i])
+    return ''.join(lst)
+
 
 def run_shell(cmd, logger):
     ret, output = commands.getstatusoutput(cmd)
@@ -10,6 +24,7 @@ def run_shell(cmd, logger):
         logger.debug(">$ %s" % cmd)
         logger.debug(output)
     return ret
+
 
 def version_cmp(ver1, ver2):
     ver1_parts = ver1.split('.')
@@ -42,3 +57,18 @@ def version_cmp(ver1, ver2):
         else:
             continue
     return 0
+
+
+def get_links(url):
+    res = requests.get(url, allow_redirects=True)
+    if res.status_code in [200, 201, 202]:
+        matches = re.findall(r'''href=(?:'|")([^'"]*)(?:'|")''',
+                            res.text,
+                            re.I)
+        matches = list(set(matches))
+        for i in range(0, len(matches)):
+            if not(matches[i].startswith('http') or
+                    matches[i].startswith('ftp')):
+                matches[i] = url_join(url, matches[i])
+        return matches
+    return None

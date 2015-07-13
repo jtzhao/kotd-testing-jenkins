@@ -11,7 +11,7 @@ def get_logger(name, level=None):
     logger = logging.getLogger(name)
     if level is not None:
         level = getattr(logging, level)
-    logger.setLevel(level)
+        logger.setLevel(level)
     return logger
 
 config(level=kotd_config.get('log', 'level'))
